@@ -1,4 +1,5 @@
 import webbrowser
+import time
 from datetime import datetime, timedelta
 
 def generate_trip_dates(start_date_X, end_date_Y, min_duration_N, max_duration_M):
@@ -17,14 +18,21 @@ def generate_trip_dates(start_date_X, end_date_Y, min_duration_N, max_duration_M
 
     return trip_dates
 
-url_template = "https://www.skyscanner.net/transport/flights/ams/cpt/{start_date}/{end_date}/?adultsv2=2&cabinclass=economy&childrenv2=&duration=1110&inboundaltsenabled=false&outboundaltsenabled=false&rtn=1&stops=!twoPlusStops"
-start_date_X = '2024-02-08'
-end_date_Y = '2024-02-14'
-min_duration_N = 14
-max_duration_M = 21
+url_template = "https://www.skyscanner.net/transport/flights/{origin}/{destination}/{start_date}/{end_date}/"
+query_parameters = "?adultsv2=1&cabinclass=economy&childrenv2=&inboundaltsenabled=false&outboundaltsenabled=false&preferdirects=true&ref=home&rtn=1"
+origins = ["dtm","dus","ams","mst","cgn","nrn"]
+destinations = ["ayt"]
+start_date_X = '2024-04-24'
+end_date_Y = '2024-04-25'
+min_duration_N = 5
+max_duration_M = 6
 
 possible_trip_dates = generate_trip_dates(start_date_X, end_date_Y, min_duration_N, max_duration_M)
+url_template = url_template + query_parameters
 
-for start_date, end_date in possible_trip_dates:
-    url = url_template.format(start_date=start_date, end_date=end_date)
-    webbrowser.open(url, new=0, autoraise=True)
+for origin in origins:
+    for destination in destinations:
+        for start_date, end_date in possible_trip_dates:
+            url = url_template.format(origin=origin, destination=destination, start_date=start_date, end_date=end_date)
+            webbrowser.open(url, new=0, autoraise=True)
+            time.sleep(1.5)
